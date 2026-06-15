@@ -1,0 +1,173 @@
+[2026-06-05 19:36:01] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:36:08] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:36:13] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:36:19] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:36:25] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:36:36] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:36:42] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:36:42] INFO [sentinel.lifespan:19] - Starting up SentinelAI backend service...
+[2026-06-05 19:36:42] INFO [sentinel.lifespan:23] - Database tables initialized successfully.
+[2026-06-05 19:39:22] INFO [sentinel.lifespan:31] - Shutting down SentinelAI backend service...
+[2026-06-05 19:39:22] INFO [sentinel.lifespan:34] - Backend service shutdown complete.
+[2026-06-05 19:39:27] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-05 19:39:27] INFO [sentinel.lifespan:19] - Starting up SentinelAI backend service...
+[2026-06-05 19:39:27] INFO [sentinel.lifespan:23] - Database tables initialized successfully.
+[2026-06-05 19:41:04] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-05 19:42:02] INFO [sentinel.start:75] - Video pipeline thread started with source: mock
+[2026-06-05 19:42:02] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-05 19:42:02] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-05 19:42:05] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 101
+[2026-06-05 19:42:05] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-05 19:42:15] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-05 19:42:22] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 101 (Duration: 20.0s)
+[2026-06-05 19:42:25] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-05 19:42:35] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-05 19:42:45] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-05 19:42:52] INFO [sentinel._run_pipeline:286] - Pipeline processing loop terminated.
+[2026-06-05 19:42:52] INFO [sentinel.stop:89] - Video pipeline stopped.
+[2026-06-05 19:43:14] INFO [sentinel.start:75] - Video pipeline thread started with source: mock
+[2026-06-05 19:43:14] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-05 19:43:14] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-05 19:43:17] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-05 19:43:18] INFO [sentinel._run_pipeline:286] - Pipeline processing loop terminated.
+[2026-06-05 19:43:18] INFO [sentinel.stop:89] - Video pipeline stopped.
+[2026-06-06 13:28:29] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-06 13:28:29] INFO [sentinel.lifespan:19] - Starting up SentinelAI backend service...
+[2026-06-06 13:28:29] INFO [sentinel.lifespan:23] - Database tables initialized successfully.
+[2026-06-06 13:28:34] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-06 13:28:40] INFO [sentinel.start:75] - Video pipeline thread started with source: mock
+[2026-06-06 13:28:41] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-06 13:28:41] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-06 13:28:44] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 101
+[2026-06-06 13:28:44] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-06 13:28:50] INFO [sentinel._run_pipeline:286] - Pipeline processing loop terminated.
+[2026-06-06 13:28:50] INFO [sentinel.stop:89] - Video pipeline stopped.
+[2026-06-06 13:28:51] INFO [sentinel.start:75] - Video pipeline thread started with source: mock
+[2026-06-06 13:28:51] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-06 13:28:51] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-06 13:28:53] INFO [sentinel._run_pipeline:286] - Pipeline processing loop terminated.
+[2026-06-06 13:28:53] INFO [sentinel.stop:89] - Video pipeline stopped.
+[2026-06-06 13:28:57] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-06 13:28:57] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-06 13:37:57] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-06 13:37:58] INFO [sentinel.lifespan:19] - Starting up SentinelAI backend service...
+[2026-06-06 13:37:58] INFO [sentinel.lifespan:23] - Database tables initialized successfully.
+[2026-06-06 13:38:01] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-06 13:38:14] INFO [sentinel.start:75] - Video pipeline thread started with source: mock
+[2026-06-06 13:38:14] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-06 13:38:14] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-06 13:38:17] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 101
+[2026-06-06 13:38:17] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-06 13:38:21] INFO [sentinel._run_pipeline:286] - Pipeline processing loop terminated.
+[2026-06-06 13:38:21] INFO [sentinel.stop:89] - Video pipeline stopped.
+[2026-06-15 13:52:56] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-15 13:52:56] INFO [sentinel.lifespan:19] - Starting up SentinelAI backend service...
+[2026-06-15 13:52:56] INFO [sentinel.lifespan:23] - Database tables initialized successfully.
+[2026-06-15 14:07:01] INFO [sentinel.lifespan:31] - Shutting down SentinelAI backend service...
+[2026-06-15 14:07:01] INFO [sentinel.lifespan:34] - Backend service shutdown complete.
+[2026-06-15 15:55:21] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-15 15:55:22] INFO [sentinel.lifespan:19] - Starting up SentinelAI backend service...
+[2026-06-15 15:55:22] INFO [sentinel.lifespan:23] - Database tables initialized successfully.
+[2026-06-15 16:29:09] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-15 16:29:17] INFO [sentinel.start:75] - Video pipeline thread started with source: mock
+[2026-06-15 16:29:17] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-15 16:29:17] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-15 16:29:20] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 101
+[2026-06-15 16:29:20] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-15 16:29:28] INFO [sentinel._run_pipeline:286] - Pipeline processing loop terminated.
+[2026-06-15 16:29:28] INFO [sentinel.stop:89] - Video pipeline stopped.
+[2026-06-15 16:31:37] INFO [sentinel.start:75] - Video pipeline thread started with source: mock
+[2026-06-15 16:31:37] INFO [sentinel.mjpeg_frame_generator:44] - MJPEG stream connection opened.
+[2026-06-15 16:31:37] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 101 (Duration: 140.6s)
+[2026-06-15 16:31:37] INFO [sentinel.mjpeg_frame_generator:62] - MJPEG stream connection closed by client.
+[2026-06-15 16:31:40] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-15 16:31:47] INFO [sentinel._run_pipeline:286] - Pipeline processing loop terminated.
+[2026-06-15 16:31:47] INFO [sentinel.stop:89] - Video pipeline stopped.
+[2026-06-15 16:43:00] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-15 16:43:00] INFO [sentinel.lifespan:22] - Starting up SentinelAI backend service...
+[2026-06-15 16:43:00] INFO [sentinel.lifespan:26] - Database tables initialized successfully.
+[2026-06-15 16:43:45] INFO [sentinel.mjpeg_frame_generator:46] - MJPEG stream connection opened.
+[2026-06-15 16:48:12] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-15 16:48:12] INFO [sentinel.lifespan:22] - Starting up SentinelAI backend service...
+[2026-06-15 16:48:12] INFO [sentinel.lifespan:26] - Database tables initialized successfully.
+[2026-06-15 16:48:20] INFO [sentinel.mjpeg_frame_generator:46] - MJPEG stream connection opened.
+[2026-06-15 16:51:15] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-15 16:51:15] INFO [sentinel.lifespan:22] - Starting up SentinelAI backend service...
+[2026-06-15 16:51:15] INFO [sentinel.lifespan:26] - Database tables initialized successfully.
+[2026-06-15 16:51:16] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:51:23] WARNING [sentinel.stop:121] - Pipeline is not running.
+[2026-06-15 16:51:23] INFO [sentinel.__init__:24] - Initializing YOLOv8 model: yolov8n.pt with threshold: 0.45
+[2026-06-15 16:51:23] INFO [sentinel.start:115] - Video pipeline thread started with source: /sentinel-ai/static/videos/ab13799de4ba4100aecdfeb508436a41_mixkit-thief-creep-through-house-and-looks-up-at-camera-12830-hd-ready.mp4
+[2026-06-15 16:51:23] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:51:26] INFO [sentinel.__init__:27] - YOLOv8 model loaded successfully.
+[2026-06-15 16:51:26] INFO [sentinel.__init__:16] - Initializing DeepSORT tracker with MobileNet embedder...
+[2026-06-15 16:51:29] INFO [sentinel.__init__:26] - DeepSORT tracker initialized successfully.
+[2026-06-15 16:51:53] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 1 (Duration: 20.0s)
+[2026-06-15 16:53:11] INFO [sentinel.mjpeg_frame_generator:65] - MJPEG stream connection closed by client.
+[2026-06-15 16:53:11] INFO [sentinel.mjpeg_frame_generator:65] - MJPEG stream connection closed by client.
+[2026-06-15 16:53:11] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:53:22] INFO [sentinel._run_pipeline:432] - Pipeline processing loop terminated.
+[2026-06-15 16:53:22] INFO [sentinel.save_report:532] - Forensic report generated: /sentinel-ai/static/reports/report_0f8c1ca0-5729-4a6e-a5f1-477f61ecd8f3.json
+[2026-06-15 16:53:22] INFO [sentinel.save_report:532] - Forensic report generated: /sentinel-ai/static/reports/report_0f8c1ca0-5729-4a6e-a5f1-477f61ecd8f3.json
+[2026-06-15 16:53:22] INFO [sentinel.stop:135] - Video pipeline stopped.
+[2026-06-15 16:53:22] INFO [sentinel.start:115] - Video pipeline thread started with source: /sentinel-ai/static/videos/5c36dc76d40f43d2bcd20920aa33371e_15873107_1080_1920_25fps.mp4
+[2026-06-15 16:53:22] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 2 (Duration: 20.9s)
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 3 (Duration: 20.9s)
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 6 (Duration: 20.9s)
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 7 (Duration: 20.9s)
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 8 (Duration: 20.9s)
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 9 (Duration: 20.9s)
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 10 (Duration: 20.9s)
+[2026-06-15 16:53:55] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 11 (Duration: 20.9s)
+[2026-06-15 16:54:01] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 12 (Duration: 23.6s)
+[2026-06-15 16:54:01] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 13 (Duration: 22.0s)
+[2026-06-15 16:54:01] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 14 (Duration: 22.0s)
+[2026-06-15 16:54:01] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 15 (Duration: 20.6s)
+[2026-06-15 16:54:08] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 16 (Duration: 20.7s)
+[2026-06-15 16:54:09] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 17 (Duration: 20.5s)
+[2026-06-15 16:54:10] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 18 (Duration: 20.1s)
+[2026-06-15 16:54:25] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 23 (Duration: 20.3s)
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 3
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 6
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 7
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 8
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 10
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 11
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 12
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 13
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 15
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 17
+[2026-06-15 16:54:35] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 23
+[2026-06-15 16:54:57] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 32
+[2026-06-15 16:55:05] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-15 16:55:08] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-15 16:55:10] INFO [sentinel.evaluate:75] - [RULE] Suspicious bag rule triggered for Person ID: 37
+[2026-06-15 16:55:14] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 32 (Duration: 20.4s)
+[2026-06-15 16:55:19] INFO [sentinel.evaluate:104] - [RULE] Suspicious bag rule triggered for untracked targets
+[2026-06-15 16:55:31] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 37 (Duration: 20.8s)
+[2026-06-15 16:56:00] INFO [sentinel.__init__:16] - EventEngine initialized with 2 rules: ['suspicious_bag', 'loitering']
+[2026-06-15 16:56:00] INFO [sentinel.lifespan:22] - Starting up SentinelAI backend service...
+[2026-06-15 16:56:00] INFO [sentinel.lifespan:26] - Database tables initialized successfully.
+[2026-06-15 16:56:13] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:56:16] INFO [sentinel.mjpeg_frame_generator:65] - MJPEG stream connection closed by client.
+[2026-06-15 16:56:16] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:56:24] WARNING [sentinel.stop:121] - Pipeline is not running.
+[2026-06-15 16:56:24] INFO [sentinel.__init__:24] - Initializing YOLOv8 model: yolov8n.pt with threshold: 0.45
+[2026-06-15 16:56:24] INFO [sentinel.start:115] - Video pipeline thread started with source: /sentinel-ai/static/videos/bdf3f8aec5d541c0b56b9d5890e834a7_mixkit-thief-creep-through-house-and-looks-up-at-camera-12830-hd-ready.mp4
+[2026-06-15 16:56:24] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:56:26] INFO [sentinel.__init__:27] - YOLOv8 model loaded successfully.
+[2026-06-15 16:56:26] INFO [sentinel.__init__:16] - Initializing DeepSORT tracker with MobileNet embedder...
+[2026-06-15 16:56:27] INFO [sentinel.__init__:26] - DeepSORT tracker initialized successfully.
+[2026-06-15 16:56:30] INFO [sentinel.save_report:548] - Forensic report generated: /sentinel-ai/static/reports/report_56be524f-d7f5-4410-bd15-f3ae39f7c19b.json
+[2026-06-15 16:56:32] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:56:44] INFO [sentinel.mjpeg_frame_generator:65] - MJPEG stream connection closed by client.
+[2026-06-15 16:56:44] INFO [sentinel._run_pipeline:448] - Pipeline processing loop terminated.
+[2026-06-15 16:56:44] INFO [sentinel.save_report:548] - Forensic report generated: /sentinel-ai/static/reports/report_56be524f-d7f5-4410-bd15-f3ae39f7c19b.json
+[2026-06-15 16:56:44] INFO [sentinel.save_report:548] - Forensic report generated: /sentinel-ai/static/reports/report_56be524f-d7f5-4410-bd15-f3ae39f7c19b.json
+[2026-06-15 16:56:44] INFO [sentinel.stop:135] - Video pipeline stopped.
+[2026-06-15 16:56:44] INFO [sentinel.start:115] - Video pipeline thread started with source: /sentinel-ai/static/videos/a8bfe08eca3f40d9bf2008634c766a99_mixkit-thief-creep-through-house-and-looks-up-at-camera-12830-hd-ready.mp4
+[2026-06-15 16:56:44] INFO [sentinel.mjpeg_frame_generator:47] - MJPEG stream connection opened.
+[2026-06-15 16:56:45] INFO [sentinel.save_report:548] - Forensic report generated: /sentinel-ai/static/reports/report_f505434a-e9dd-437b-988e-985204892643.json
+[2026-06-15 16:56:50] INFO [sentinel.evaluate:78] - [RULE] Loitering rule triggered for Person ID: 1 (Duration: 20.2s)
+[2026-06-15 16:56:50] INFO [sentinel.save_report:548] - Forensic report generated: /sentinel-ai/static/reports/report_f505434a-e9dd-437b-988e-985204892643.json

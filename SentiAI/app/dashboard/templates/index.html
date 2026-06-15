@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentinelAI — Surveillance Analytics</title>
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-green: #2ecc71;
+            --accent-blue: #3498db;
+            --accent-red: #e74c3c;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(26, 54, 110, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(15, 76, 117, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .navbar-brand-custom {
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Tabs Styling */
+        .nav-tabs {
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+        .nav-tabs .nav-link {
+            background: none !important;
+            border: none !important;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 12px 24px;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-tabs .nav-link:hover {
+            color: var(--text-primary);
+        }
+        .nav-tabs .nav-link.active {
+            color: var(--accent-blue) !important;
+        }
+        .nav-tabs .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 24px;
+            right: 24px;
+            height: 2px;
+            background-color: var(--accent-blue);
+            box-shadow: 0 0 10px var(--accent-blue);
+        }
+
+        .tech-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tech-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .feed-container {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            background: #000;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .feed-img {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        .pulse-dot.active {
+            background-color: var(--accent-green);
+            box-shadow: 0 0 12px var(--accent-green);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 18px var(--accent-green); }
+            100% { transform: scale(0.9); opacity: 0.8; }
+        }
+
+        .badge-alert {
+            background: rgba(231, 76, 60, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .badge-event {
+            background: rgba(52, 152, 219, 0.15);
+            color: #74b9ff;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .table-custom {
+            font-size: 0.9rem;
+        }
+        
+        .table-custom th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table-custom td {
+            color: var(--text-primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            vertical-align: middle;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .control-input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        .control-input:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: var(--accent-blue);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.25);
+        }
+
+        .btn-glow-green {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-glow-green:hover {
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-glow-red {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border: none;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-glow-red:hover {
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .alert-feed-container {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            background: rgba(231, 76, 60, 0.05);
+            border-left: 4px solid var(--accent-red);
+            border-radius: 4px 8px 8px 4px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+        
+        .alert-item:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        /* Forensic Uploader styles */
+        .uploader-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 50px 20px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.4);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .uploader-zone:hover, .uploader-zone.dragover {
+            border-color: var(--accent-blue);
+            background: rgba(52, 152, 219, 0.05);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.1);
+        }
+        .progress-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .progress-card.failed .progress-bar {
+            background-color: var(--accent-red) !important;
+        }
+        .progress-card.failed #upload-status-badge {
+            background-color: var(--accent-red) !important;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.25);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg border-bottom border-secondary-subtle" style="background-color: rgba(11, 15, 25, 0.8); backdrop-filter: blur(8px);">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="bi bi-shield-fill-check me-2 fs-3 text-primary"></i>
+                <span class="navbar-brand-custom">SentinelAI</span>
+            </a>
+            <div class="d-flex align-items-center ms-auto">
+                <span class="text-secondary me-3 d-none d-md-inline">Live Pipeline:</span>
+                <span id="pipeline-status-text" class="fw-semibold me-2">STOPPED</span>
+                <span id="pipeline-status-dot" class="pulse-dot"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Tabs Bar -->
+    <ul class="nav nav-tabs border-bottom border-secondary-subtle px-4 mt-3" id="main-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="live-tab" data-bs-toggle="tab" data-bs-target="#live-content" type="button" role="tab"><i class="bi bi-camera-video me-2"></i>Live Monitoring</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-content" type="button" role="tab"><i class="bi bi-search me-2"></i>Video Upload Analysis</button>
+        </li>
+    </ul>
+
+    <!-- Main Workspace Container -->
+    <div class="container-fluid p-4">
+        <div class="tab-content" id="main-tab-content">
+            
+            <!-- Tab 1: Live Monitoring Content -->
+            <div class="tab-pane fade show active" id="live-content" role="tabpanel">
+                
+                <!-- Controls & Config Toolbar -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="tech-card p-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <label for="stream-source-input" class="fw-semibold text-secondary">Inference Source:</label>
+                                <input type="text" id="stream-source-input" class="form-control control-input" value="{{ config.source }}" style="width: 260px;" placeholder="webcam (0) / video path / mock">
+                                <button id="btn-start" class="btn btn-glow-green px-4"><i class="bi bi-play-fill me-1"></i>Start Ingestion</button>
+                                <button id="btn-stop" class="btn btn-glow-red px-4" disabled><i class="bi bi-stop-fill me-1"></i>Stop</button>
+                            </div>
+                            <div class="d-flex gap-4">
+                                <div class="text-end">
+                                    <span class="d-block text-secondary small">Model Engine</span>
+                                    <span class="fw-bold text-info mono">{{ config.model }}</span>
+                                </div>
+                                <div class="text-end border-start ps-4">
+                                    <span class="d-block text-secondary small">Conf Threshold</span>
+                                    <span class="fw-bold text-warning mono">{{ config.confidence }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Content Grid -->
+                <div class="row g-4">
+                    
+                    <!-- Video Streaming Canvas -->
+                    <div class="col-lg-7">
+                        <div class="tech-card p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h4 class="mb-0 fw-bold"><i class="bi bi-camera-video me-2 text-primary"></i>Live Analysis Stream</h4>
+                                <span id="fps-counter" class="badge bg-secondary mono">0.0 FPS</span>
+                            </div>
+                            <div class="feed-container">
+                                <!-- Points to backend MJPEG stream -->
+                                <img id="live-feed-img" src="/api/stream/video_feed" alt="SentinelAI Stream" class="feed-img">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Real-Time Metrics & Live Alert Triage -->
+                    <div class="col-lg-5">
+                        <div class="d-flex flex-column gap-4 h-100">
+                            
+                            <!-- Analytics Metrics Block -->
+                            <div class="tech-card p-3">
+                                <h5 class="fw-bold mb-3"><i class="bi bi-cpu me-2 text-info"></i>Pipeline Analytics</h5>
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="p-3 rounded border border-secondary-subtle" style="background: rgba(15, 23, 42, 0.4);">
+                                            <span class="d-block text-secondary small">Processed Frames</span>
+                                            <span id="metric-frames" class="fs-4 fw-bold mono">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 rounded border border-secondary-subtle" style="background: rgba(15, 23, 42, 0.4);">
+                                            <span class="d-block text-secondary small">Pipeline Uptime</span>
+                                            <span id="metric-uptime" class="fs-4 fw-bold mono">0s</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Security Alert Center -->
+                            <div class="tech-card p-3 flex-grow-1">
+                                <h5 class="fw-bold mb-3 text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Security Alert Feed</h5>
+                                <div id="alerts-feed" class="alert-feed-container pr-2">
+                                    <!-- Populated dynamically -->
+                                    <div class="text-center text-secondary py-5">
+                                        <i class="bi bi-shield-check fs-1 d-block mb-2 text-secondary"></i>
+                                        No active alerts detected.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Global Event Log Table -->
+                    <div class="col-12">
+                        <div class="tech-card p-4">
+                            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history me-2 text-warning"></i>Security Event Audit Trail</h5>
+                            <div class="table-responsive">
+                                <table class="table table-custom align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp (UTC)</th>
+                                            <th>Event Type</th>
+                                            <th>Track ID</th>
+                                            <th>Source Feed</th>
+                                            <th>Detail Description / BBox</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="events-table-body">
+                                        <!-- Populated dynamically -->
+                                        <tr>
+                                            <td colspan="5" class="text-center text-secondary py-4">No events logged yet.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Tab 2: Video Upload Analysis Content -->
+            <div class="tab-pane fade" id="upload-content" role="tabpanel">
+                
+                <!-- State 1: Dropzone container -->
+                <div id="forensic-uploader-container" class="row">
+                    <div class="col-lg-6 mx-auto py-5">
+                        <div class="tech-card p-5 uploader-zone text-center" id="drop-zone">
+                            <i class="bi bi-film text-primary d-block mb-4" style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.45));"></i>
+                            <h4 class="fw-bold text-white mb-2">Forensic Video Upload</h4>
+                            <p class="text-secondary mb-4">Drag & Drop Surveillance Video File<br><span style="font-size: 0.8rem;">Supports MP4, AVI, MOV, MKV formats (Max 100MB)</span></p>
+                            <button id="btn-browse" class="btn btn-primary px-4 py-2" style="background: linear-gradient(135deg, #3498db, #2ecc71); border: none; font-weight: 600;">Browse Files</button>
+                            <input type="file" id="forensic-file-input" accept="video/*" style="display: none;">
+                        </div>
+
+                        <!-- Progress Bar Card -->
+                        <div id="upload-progress-card" class="progress-card mt-4 d-none">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span id="upload-filename" class="fw-semibold text-white mono" style="font-size: 0.9rem; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">video.mp4</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span id="upload-status-badge" class="badge bg-primary text-uppercase px-2" style="font-size: 0.7rem;">UPLOADING</span>
+                                    <span id="upload-percentage" class="fw-bold text-secondary mono" style="font-size: 0.85rem;">0%</span>
+                                </div>
+                            </div>
+                            <div class="progress" style="height: 6px; background-color: rgba(255, 255, 255, 0.05); border-radius: 3px; overflow: hidden;">
+                                <div id="upload-progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%; transition: width 0.1s ease;"></div>
+                            </div>
+                            <div id="upload-error-msg" class="text-danger small mt-2 d-none">Analysis failed on server.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- State 2: Active Analysis Dashboard -->
+                <div id="forensic-analysis-container" class="d-none">
+                    <div class="row g-4">
+                        <!-- Left Video Player -->
+                        <div class="col-lg-6">
+                            <div class="tech-card p-3">
+                                <h5 class="fw-bold mb-3"><i class="bi bi-film me-2 text-primary"></i>Original Video</h5>
+                                <div class="feed-container">
+                                    <video id="forensic-original-video" class="w-100" style="max-height: 400px; object-fit: contain; display: block;" controls muted></video>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Video Player -->
+                        <div class="col-lg-6">
+                            <div class="tech-card p-3">
+                                <h5 class="fw-bold mb-3"><i class="bi bi-camera-reels me-2 text-success"></i>AI Annotated Video Feed</h5>
+                                <div class="feed-container">
+                                    <img id="forensic-annotated-feed" class="feed-img w-100" style="max-height: 400px; object-fit: contain; display: block;" src="" alt="AI Annotated Feed">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Left: Investigation Alerts -->
+                        <div class="col-lg-5">
+                            <div class="tech-card p-3 h-100 d-flex flex-column" style="min-height: 380px;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold mb-0 text-danger" style="color: #ff6b6b !important;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Investigation Alerts</h5>
+                                    <button id="btn-pdf-report" class="btn btn-danger btn-sm d-flex align-items-center gap-2" style="font-size: 0.8rem; font-weight: 600;" disabled>
+                                        <i class="bi bi-file-earmark-pdf-fill"></i>PDF Report
+                                    </button>
+                                </div>
+                                <div id="forensic-alerts-feed" class="alert-feed-container flex-grow-1">
+                                    <div class="text-center text-secondary py-5">
+                                        <i class="bi bi-shield-check fs-2 d-block mb-2"></i>
+                                        No alerts triggered.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Right: Forensic Timeline -->
+                        <div class="col-lg-7">
+                            <div class="tech-card p-3 h-100 d-flex flex-column" style="min-height: 380px;">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="fw-bold mb-0 text-warning"><i class="bi bi-clock-history me-2"></i>Forensic Timeline</h5>
+                                    <input type="text" id="forensic-timeline-search" class="form-control control-input py-1 px-3" style="width: 220px; font-size: 0.85rem;" placeholder="Search timeline...">
+                                </div>
+                                <div class="table-responsive flex-grow-1" style="max-height: 300px; overflow-y: auto;">
+                                    <table class="table table-custom align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Video Offset</th>
+                                                <th>Event Type</th>
+                                                <th>Track ID</th>
+                                                <th>Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="forensic-timeline-body">
+                                            <tr>
+                                                <td colspan="4" class="text-center text-secondary py-4">No events logged yet.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- App Scripts -->
+    <script>
+        // --- LIVE FEED SYSTEM SCRIPTS ---
+        const btnStart = document.getElementById('btn-start');
+        const btnStop = document.getElementById('btn-stop');
+        const inputSource = document.getElementById('stream-source-input');
+        const pipelineStatusText = document.getElementById('pipeline-status-text');
+        const pipelineStatusDot = document.getElementById('pipeline-status-dot');
+        const liveFeedImg = document.getElementById('live-feed-img');
+        
+        // Metrics
+        const fpsCounter = document.getElementById('fps-counter');
+        const metricFrames = document.getElementById('metric-frames');
+        const metricUptime = document.getElementById('metric-uptime');
+        
+        // Feeds
+        const alertsFeed = document.getElementById('alerts-feed');
+        const eventsTableBody = document.getElementById('events-table-body');
+
+        // State variables
+        let isRunning = false;
+
+        // Toggle Buttons status
+        function updateUIState(active) {
+            isRunning = active;
+            btnStart.disabled = active;
+            btnStop.disabled = !active;
+            
+            if (active) {
+                pipelineStatusText.textContent = "ACTIVE";
+                pipelineStatusText.className = "fw-semibold me-2 text-success";
+                pipelineStatusDot.className = "pulse-dot active";
+            } else {
+                pipelineStatusText.textContent = "STOPPED";
+                pipelineStatusText.className = "fw-semibold me-2 text-danger";
+                pipelineStatusDot.className = "pulse-dot";
+                fpsCounter.textContent = "0.0 FPS";
+            }
+        }
+
+        // Start Ingestion
+        btnStart.addEventListener('click', async () => {
+            const source = inputSource.value.trim() || "mock";
+            try {
+                const response = await fetch('/api/start-stream', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({source: source})
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    updateUIState(true);
+                    liveFeedImg.src = "/api/stream/video_feed?t=" + new Date().getTime();
+                } else {
+                    alert(data.detail || "Failed to start stream.");
+                }
+            } catch (error) {
+                console.error("Error starting stream:", error);
+                alert("Network error starting stream.");
+            }
+        });
+
+        // Stop Ingestion
+        btnStop.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/stop-stream', {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    updateUIState(false);
+                } else {
+                    const data = await response.json();
+                    alert(data.detail || "Failed to stop stream.");
+                }
+            } catch (error) {
+                console.error("Error stopping stream:", error);
+            }
+        });
+
+        // Poll Pipeline Status & Database updates
+        async function pollStatus() {
+            try {
+                const res = await fetch('/api/stream-status');
+                if (res.ok) {
+                    const data = await res.json();
+                    updateUIState(data.is_running);
+                    
+                    if (data.is_running) {
+                        fpsCounter.textContent = `${data.fps.toFixed(1)} FPS`;
+                        metricFrames.textContent = data.processed_frames;
+                        metricUptime.textContent = `${data.uptime_seconds}s`;
+                    }
+                }
+            } catch (err) {
+                console.error("Status polling failed:", err);
+            }
+        }
+
+        // Fetch events & alerts
+        async function fetchAlertsAndEvents() {
+            try {
+                // Fetch alerts
+                const alertsRes = await fetch('/api/alerts?limit=15');
+                if (alertsRes.ok) {
+                    const alerts = await alertsRes.json();
+                    renderAlerts(alerts);
+                }
+
+                // Fetch events
+                const eventsRes = await fetch('/api/events?limit=15');
+                if (eventsRes.ok) {
+                    const events = await eventsRes.json();
+                    renderEvents(events);
+                }
+            } catch (err) {
+                console.error("Database logs fetching failed:", err);
+            }
+        }
+
+        function renderAlerts(alerts) {
+            if (alerts.length === 0) {
+                alertsFeed.innerHTML = `
+                    <div class="text-center text-secondary py-5">
+                        <i class="bi bi-shield-check fs-1 d-block mb-2 text-secondary"></i>
+                        No active alerts detected.
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            alerts.forEach(alert => {
+                const date = new Date(alert.timestamp);
+                const timeString = date.toISOString().replace('T', ' ').substring(0, 19);
+                html += `
+                    <div class="alert-item d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge-alert mb-1 d-inline-block">${alert.alert_type}</span>
+                            <div class="fw-semibold text-white fs-6 mt-1">${alert.message}</div>
+                            <span class="text-secondary small mono mt-1 d-block"><i class="bi bi-clock me-1"></i>${timeString}</span>
+                        </div>
+                        <span class="badge bg-danger text-uppercase px-2" style="font-size: 0.65rem;">${alert.status}</span>
+                    </div>
+                `;
+            });
+            alertsFeed.innerHTML = html;
+        }
+
+        function renderEvents(events) {
+            if (events.length === 0) {
+                eventsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center text-secondary py-4">No events logged yet.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            events.forEach(event => {
+                const date = new Date(event.timestamp);
+                const timeString = date.toISOString().replace('T', ' ').substring(0, 19);
+                const trackIdText = event.tracking_id ? `<span class="badge bg-secondary mono px-2 py-1">${event.tracking_id}</span>` : '<span class="text-muted">—</span>';
+                
+                let detailsText = '';
+                if (event.details) {
+                    if (event.details.message) {
+                        detailsText = event.details.message;
+                    } else {
+                        detailsText = JSON.stringify(event.details);
+                    }
+                    if (event.details.duration_seconds) {
+                        detailsText += ` [Duration: ${event.details.duration_seconds}s]`;
+                    }
+                }
+                
+                html += `
+                    <tr>
+                        <td class="mono text-secondary">${timeString}</td>
+                        <td><span class="badge-event">${event.event_type}</span></td>
+                        <td>${trackIdText}</td>
+                        <td class="text-info mono small">${event.source_stream}</td>
+                        <td class="text-light">${detailsText}</td>
+                    </tr>
+                `;
+            });
+            eventsTableBody.innerHTML = html;
+        }
+
+        // --- FORENSIC VIDEO UPLOAD SYSTEM SCRIPTS ---
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('forensic-file-input');
+        const btnBrowse = document.getElementById('btn-browse');
+        
+        const progressCard = document.getElementById('upload-progress-card');
+        const filenameLabel = document.getElementById('upload-filename');
+        const percentageLabel = document.getElementById('upload-percentage');
+        const progressBar = document.getElementById('upload-progress-bar');
+        const statusBadge = document.getElementById('upload-status-badge');
+        const errorMsg = document.getElementById('upload-error-msg');
+        
+        const uploaderContainer = document.getElementById('forensic-uploader-container');
+        const analysisContainer = document.getElementById('forensic-analysis-container');
+        
+        const originalVideo = document.getElementById('forensic-original-video');
+        const annotatedFeed = document.getElementById('forensic-annotated-feed');
+        const btnPdfReport = document.getElementById('btn-pdf-report');
+        
+        const forensicAlertsFeed = document.getElementById('forensic-alerts-feed');
+        const forensicTimelineBody = document.getElementById('forensic-timeline-body');
+        const forensicTimelineSearch = document.getElementById('forensic-timeline-search');
+
+        // State trackers
+        let uploadFilename = null;
+        let forensicPollInterval = null;
+        let forensicDataInterval = null;
+        let activeRunUuid = null;
+        let firstEventTimestamp = null;
+
+        // Click browse file
+        btnBrowse.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+
+        // Drag and drop events
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length > 0) {
+                handleFileUpload(files[0]);
+            }
+        });
+
+        // Seconds formatter
+        function formatSeconds(seconds) {
+            const secs = Math.max(0, Math.floor(seconds));
+            const mins = Math.floor(secs / 60);
+            const hours = Math.floor(mins / 60);
+            const pad = (num) => String(num).padStart(2, '0');
+            return `${pad(hours)}:${pad(mins % 60)}:${pad(secs % 60)}`;
+        }
+
+        // Handle File Upload and Progress
+        function handleFileUpload(file) {
+            // Reset state
+            progressCard.classList.remove('d-none', 'failed');
+            progressBar.className = 'progress-bar bg-primary';
+            statusBadge.className = 'badge bg-primary text-uppercase px-2';
+            statusBadge.textContent = 'UPLOADING';
+            percentageLabel.textContent = '0%';
+            progressBar.style.width = '0%';
+            errorMsg.classList.add('d-none');
+            filenameLabel.textContent = file.name;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/upload-video', true);
+
+            // Progress callback
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const percentComplete = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = percentComplete + '%';
+                    percentageLabel.textContent = percentComplete + '%';
+                }
+            };
+
+            // Complete callback
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    statusBadge.textContent = 'ANALYZING';
+                    percentageLabel.textContent = '100%';
+                    progressBar.style.width = '100%';
+                    uploadFilename = response.filename;
+                    
+                    // Initialize players
+                    originalVideo.src = response.url;
+                    
+                    // Trigger stream ingestion
+                    startForensicAnalysis(response.filename);
+                } else {
+                    const response = JSON.parse(xhr.responseText || '{}');
+                    showUploadFailed(response.detail || "Analysis failed on server.");
+                }
+            };
+
+            xhr.onerror = function() {
+                showUploadFailed("Analysis failed on server.");
+            };
+
+            const formData = new FormData();
+            formData.append('file', file);
+            xhr.send(formData);
+        }
+
+        function showUploadFailed(message) {
+            progressCard.classList.add('failed');
+            statusBadge.textContent = 'FAILED';
+            errorMsg.textContent = message;
+            errorMsg.classList.remove('d-none');
+        }
+
+        // Start Ingestion for Forensic Analysis
+        async function startForensicAnalysis(filename) {
+            try {
+                // If stream is already running, stop it first
+                await fetch('/api/stop-stream', { method: 'POST' }).catch(() => {});
+                
+                const res = await fetch('/api/start-stream', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ source: filename })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    activeRunUuid = data.status.run_uuid;
+                    firstEventTimestamp = null;
+                    
+                    // Show Analysis Dashboard, Hide Uploader
+                    uploaderContainer.classList.add('d-none');
+                    analysisContainer.classList.remove('d-none');
+                    
+                    // Start streams
+                    originalVideo.load();
+                    originalVideo.play();
+                    annotatedFeed.src = "/api/stream/video_feed?t=" + new Date().getTime();
+                    
+                    // Enable Report redirection
+                    btnPdfReport.disabled = false;
+                    btnPdfReport.onclick = () => {
+                        window.open(`/report?uuid=${activeRunUuid}`, '_blank');
+                    };
+
+                    // Set Polling Loops
+                    forensicPollInterval = setInterval(pollForensicStatus, 1000);
+                    forensicDataInterval = setInterval(fetchForensicData, 1000);
+                } else {
+                    const data = await res.json();
+                    showUploadFailed(data.detail || "Failed to start pipeline analysis.");
+                }
+            } catch (err) {
+                console.error("Forensic analysis failed:", err);
+                showUploadFailed("Failed to initialize backend processing stream.");
+            }
+        }
+
+        // Poll upload pipeline status
+        async function pollForensicStatus() {
+            try {
+                const res = await fetch('/api/stream-status');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (!data.is_running) {
+                        // Ingestion finished (video completed or manual stop)
+                        clearInterval(forensicPollInterval);
+                        btnPdfReport.disabled = false;
+                        originalVideo.pause();
+                        annotatedFeed.src = "";
+                        
+                        // Perform one final data pull to fetch everything
+                        fetchForensicData();
+                    }
+                }
+            } catch (err) {
+                console.error("Forensic status polling failed:", err);
+            }
+        }
+
+        // Fetch events and alerts for forensic stream
+        async function fetchForensicData() {
+            if (!uploadFilename) return;
+            
+            try {
+                // Fetch events
+                const eventsRes = await fetch('/api/events?limit=50');
+                const alertsRes = await fetch('/api/alerts?limit=50');
+                
+                if (eventsRes.ok && alertsRes.ok) {
+                    const events = await eventsRes.json();
+                    const alerts = await alertsRes.json();
+                    
+                    // Filter events by current uploaded video stream name
+                    const filteredEvents = events.filter(e => e.source_stream.includes(uploadFilename));
+                    
+                    if (filteredEvents.length > 0) {
+                        // Sort by timestamp ascending to find the starting timestamp
+                        filteredEvents.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                        firstEventTimestamp = new Date(filteredEvents[0].timestamp);
+                        
+                        // Map event IDs for alerts filtering
+                        const eventIds = new Set(filteredEvents.map(e => e.id));
+                        const eventMap = new Map(filteredEvents.map(e => [e.id, e]));
+                        const filteredAlerts = alerts.filter(a => eventIds.has(a.event_id));
+                        
+                        renderForensicAlerts(filteredAlerts, eventMap);
+                        renderForensicTimeline(filteredEvents);
+                    }
+                }
+            } catch (err) {
+                console.error("Forensic data fetching failed:", err);
+            }
+        }
+
+        function renderForensicAlerts(alerts, eventMap) {
+            if (alerts.length === 0) {
+                forensicAlertsFeed.innerHTML = `
+                    <div class="text-center text-secondary py-5">
+                        <i class="bi bi-shield-check fs-2 d-block mb-2"></i>
+                        No alerts triggered.
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            alerts.forEach(alert => {
+                const event = eventMap.get(alert.event_id);
+                let offsetStr = '00:00:00';
+                if (event && firstEventTimestamp) {
+                    const offsetSec = (new Date(event.timestamp) - firstEventTimestamp) / 1000;
+                    offsetStr = formatSeconds(offsetSec);
+                }
+                
+                let classification = alert.alert_type.toUpperCase();
+                if (classification === 'SUSPICIOUS OBJECT') {
+                    classification = 'UNAUTHORIZED ENTRY';
+                } else if (classification === 'LOITERING') {
+                    classification = 'SUSPICIOUS LOITERING';
+                }
+                
+                html += `
+                    <div class="alert-item d-flex flex-column align-items-start mb-3" style="border-left: 4px solid #f39c12; background: rgba(243, 156, 18, 0.05); padding: 12px; border-radius: 4px 8px 8px 4px;">
+                        <span class="badge text-uppercase mb-2" style="border: 1px solid #f39c12; color: #f39c12; background: none; font-size: 0.7rem; font-weight: 700;">${classification}</span>
+                        <div class="fw-semibold text-white fs-6 mb-1">${alert.message}</div>
+                        <span class="text-secondary small mono"><i class="bi bi-clock me-1"></i>Offset: ${offsetStr}</span>
+                    </div>
+                `;
+            });
+            forensicAlertsFeed.innerHTML = html;
+        }
+
+        function renderForensicTimeline(events) {
+            if (events.length === 0) {
+                forensicTimelineBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-secondary py-4">No events logged yet.</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            events.forEach(event => {
+                const offsetSec = (new Date(event.timestamp) - firstEventTimestamp) / 1000;
+                const offsetStr = formatSeconds(offsetSec);
+                
+                const trackIdText = event.tracking_id ? `<span class="badge bg-secondary mono px-2 py-1">${event.tracking_id}</span>` : '<span class="text-muted">—</span>';
+                
+                let eventTypeDisplay = event.event_type.toUpperCase();
+                let detailsText = '';
+                
+                if (event.event_type === 'person_entry') {
+                    eventTypeDisplay = 'PERSON_ENTRY';
+                    detailsText = `Person ID ${event.tracking_id} entered scene.`;
+                } else if (event.event_type === 'person_exit') {
+                    eventTypeDisplay = 'PERSON_EXIT';
+                    detailsText = event.details.message || `PERSON ID ${event.tracking_id} left scene.`;
+                } else if (event.event_type === 'suspicious_object_presence') {
+                    eventTypeDisplay = 'ALERT_TRIGGERED';
+                    detailsText = `ALERT [MEDIUM]: Intrusion detected: Person ID ${event.tracking_id} entered secure area.`;
+                } else if (event.event_type === 'loitering_detection') {
+                    eventTypeDisplay = 'ALERT_TRIGGERED';
+                    const duration = Math.round(event.details.duration_seconds || 20);
+                    detailsText = `ALERT [HIGH]: Suspicious loitering detected: Person ID ${event.tracking_id} observed in secure area for ${duration}s.`;
+                } else {
+                    detailsText = event.details.message || JSON.stringify(event.details);
+                }
+                
+                // Filter search
+                const searchTerm = forensicTimelineSearch.value.toLowerCase();
+                if (searchTerm && !detailsText.toLowerCase().includes(searchTerm) && !eventTypeDisplay.toLowerCase().includes(searchTerm)) {
+                    return;
+                }
+                
+                let badgeStyle = '';
+                if (eventTypeDisplay === 'PERSON_ENTRY') {
+                    badgeStyle = 'background: rgba(52, 152, 219, 0.15); color: #74b9ff; border: 1px solid rgba(52, 152, 219, 0.3);';
+                } else if (eventTypeDisplay === 'PERSON_EXIT') {
+                    badgeStyle = 'background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3);';
+                } else if (eventTypeDisplay === 'ALERT_TRIGGERED') {
+                    badgeStyle = 'background: rgba(231, 76, 60, 0.15); color: #ff6b6b; border: 1px solid rgba(231, 76, 60, 0.3);';
+                }
+                
+                html += `
+                    <tr>
+                        <td class="mono text-secondary">${offsetStr}</td>
+                        <td><span class="badge text-uppercase px-2 py-1" style="font-size: 0.7rem; font-weight: 700; ${badgeStyle}">${eventTypeDisplay}</span></td>
+                        <td>${trackIdText}</td>
+                        <td class="text-light">${detailsText}</td>
+                    </tr>
+                `;
+            });
+            
+            forensicTimelineBody.innerHTML = html || `
+                <tr>
+                    <td colspan="4" class="text-center text-secondary py-4">No events matching search.</td>
+                </tr>
+            `;
+        }
+
+        // Search trigger
+        forensicTimelineSearch.addEventListener('input', () => {
+            fetchForensicData();
+        });
+
+        // Initialize polling timers for Live Monitoring
+        setInterval(pollStatus, 1000);
+        setInterval(fetchAlertsAndEvents, 1500);
+
+        // Run initial pull
+        pollStatus();
+        fetchAlertsAndEvents();
+    </script>
+</body>
+</html>

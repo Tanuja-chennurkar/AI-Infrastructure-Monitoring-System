@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  sentinel-ai:
+    build: .
+    container_name: sentinel_ai_container
+    ports:
+      - "8000:8000"
+    environment:
+      - VIDEO_SOURCE=mock
+      - CONFIDENCE_THRESHOLD=0.45
+      - DATABASE_URL=sqlite:///data/sentinel.db
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data:/sentinel-ai/data
+      - ./logs:/sentinel-ai/logs
+      - ./videos:/sentinel-ai/videos
+    restart: unless-stopped

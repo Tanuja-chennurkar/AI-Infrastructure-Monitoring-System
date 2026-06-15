@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentinelAI Forensic Report — {{ report.uuid if report else 'Not Found' }}</title>
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-green: #2ecc71;
+            --accent-blue: #3498db;
+            --accent-red: #e74c3c;
+            --accent-orange: #f39c12;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --sidebar-width: 320px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - Historical Reports (only visible in browser) */
+        .history-sidebar {
+            width: var(--sidebar-width);
+            background: rgba(15, 23, 42, 0.95);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-title {
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .report-history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .report-history-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .report-history-item:hover, .report-history-item.active {
+            border-color: var(--accent-blue);
+            background: rgba(52, 152, 219, 0.08);
+        }
+
+        .report-history-item .footage-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .report-history-item .report-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Main Content Pane */
+        .content-pane {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        /* Report Paper Mockup */
+        .report-document {
+            background: #ffffff;
+            color: #1e293b;
+            width: 100%;
+            max-width: 820px;
+            padding: 50px 60px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .report-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .report-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 12px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 16px;
+            font-size: 0.95rem;
+        }
+
+        .meta-label {
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .meta-val {
+            color: #1e293b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        /* Tables matching PDF Layout */
+        .table-report {
+            width: 100%;
+            margin-bottom: 24px;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .table-report th {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-report td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        .table-report tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* Severity indicators */
+        .severity-medium {
+            color: #d97706; /* Orange */
+            font-weight: 700;
+        }
+
+        .severity-high {
+            color: #dc2626; /* Red */
+            font-weight: 700;
+        }
+
+        /* Event badges */
+        .badge-type {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .type-person_entry {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .type-alert_triggered {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .type-person_exit {
+            background-color: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .type-mono-id {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Keyframe Gallery */
+        .keyframe-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .keyframe-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ffffff;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .keyframe-img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .keyframe-caption {
+            padding: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #334155;
+            background-color: #f8fafc;
+        }
+
+        /* Floating Action Buttons */
+        .fab-container {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 1000;
+        }
+
+        .btn-fab {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(46, 204, 113, 0.6);
+            color: white;
+        }
+
+        .btn-fab-back {
+            background: #334155;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-fab-back:hover {
+            background: #475569;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            .history-sidebar, .fab-container, .no-print {
+                display: none !important;
+            }
+
+            .content-pane {
+                margin-left: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            .report-document {
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .table-report th {
+                background-color: #0f172a !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .table-report tr:nth-child(even) {
+                background-color: #f8fafc !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .type-person_entry {
+                background-color: #e0f2fe !important;
+                color: #0369a1 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .type-alert_triggered {
+                background-color: #fee2e2 !important;
+                color: #b91c1c !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .type-person_exit {
+                background-color: #f0fdf4 !important;
+                color: #15803d !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .type-mono-id {
+                background-color: #f1f5f9 !important;
+                color: #475569 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Keep page breaks neat */
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Reports History Sidebar (no-print) -->
+    <div class="history-sidebar no-print">
+        <a href="/" class="text-decoration-none">
+            <div class="sidebar-title">
+                <i class="bi bi-shield-fill-check"></i>
+                SentinelAI Forensic
+            </div>
+        </a>
+        <h6 class="text-secondary text-uppercase fw-bold small mb-3">Investigation History</h6>
+        <div class="report-history-list">
+            {% if history %}
+                {% for item in history %}
+                    <a href="/report?uuid={{ item.uuid }}" class="report-history-item {% if selected_uuid == item.uuid %}active{% endif %}">
+                        <div class="footage-name" title="{{ item.source_footage }}">{{ item.source_footage }}</div>
+                        <span class="report-date">{{ item.generated_at }}</span>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <div class="text-center text-muted py-4 small">
+                    No reports generated yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main Content Panel -->
+    <div class="content-pane">
+        {% if report %}
+            <div class="report-document">
+                <!-- Header -->
+                <div class="report-header">
+                    <h1 class="report-title">SentinelAI Forensic Investigation Report</h1>
+                    <div class="meta-grid">
+                        <span class="meta-label">Report Generated:</span>
+                        <span class="meta-val">{{ report.generated_at }}</span>
+                        
+                        <span class="meta-label">Source Footage:</span>
+                        <span class="meta-val">{{ report.source_footage }}</span>
+                        
+                        <span class="meta-label">Investigation UUID:</span>
+                        <span class="meta-val">{{ report.uuid }}</span>
+                    </div>
+                </div>
+
+                <!-- Metrics Summary -->
+                <h2 class="section-title" style="margin-top: 10px;">Investigation Metrics Summary</h2>
+                <table class="table-report">
+                    <thead>
+                        <tr>
+                            <th style="width: 70%;">Metric</th>
+                            <th style="width: 30%;">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Persons Tracked</td>
+                            <td class="fw-bold">{{ report.metrics.total_persons }}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Bags Tracked</td>
+                            <td class="fw-bold">{{ report.metrics.total_bags }}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Vehicles Tracked</td>
+                            <td class="fw-bold">{{ report.metrics.total_vehicles }}</td>
+                        </tr>
+                        <tr>
+                            <td>Security Alerts Triggered</td>
+                            <td class="fw-bold">{{ report.metrics.alerts_count }}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Timeline Events Logged</td>
+                            <td class="fw-bold">{{ report.metrics.events_count }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Security Alerts Summary -->
+                <h2 class="section-title">Security Alerts Summary</h2>
+                {% if report.alerts %}
+                    <table class="table-report">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">Time</th>
+                                <th style="width: 15%;">Severity</th>
+                                <th style="width: 25%;">Classification</th>
+                                <th style="width: 45%;">Incident Log Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alert in report.alerts %}
+                                <tr>
+                                    <td class="font-monospace small">{{ alert.time }}</td>
+                                    <td>
+                                        <span class="severity-{% if alert.severity == 'HIGH' %}high{% else %}medium{% endif %}">
+                                            {{ alert.severity }}
+                                        </span>
+                                    </td>
+                                    <td class="fw-semibold">{{ alert.classification }}</td>
+                                    <td>{{ alert.details }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="text-muted py-3 px-2">No security alerts triggered during this investigation.</div>
+                {% endif %}
+
+                <!-- Page break before the timeline if timeline is very long -->
+                <div class="page-break"></div>
+
+                <!-- Chronological Forensic Event Timeline -->
+                <h2 class="section-title">Chronological Forensic Event Timeline</h2>
+                {% if report.events %}
+                    <table class="table-report">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">Offset Time</th>
+                                <th style="width: 20%;">Event Type</th>
+                                <th style="width: 15%;">Associated ID</th>
+                                <th style="width: 50%;">Event Description Log</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for event in report.events %}
+                                <tr>
+                                    <td class="font-monospace small">{{ event.time }}</td>
+                                    <td>
+                                        <span class="badge-type type-{{ event.type|lower }}">
+                                            {{ event.type }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if event.id != '—' and event.id != None %}
+                                            <span class="type-mono-id">{{ event.id }}</span>
+                                        {% else %}
+                                            <span class="text-muted">—</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ event.log }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="text-muted py-3 px-2">No chronological events logged.</div>
+                {% endif %}
+
+                <!-- Page break for Keyframes -->
+                {% if report.keyframes %}
+                    <div class="page-break"></div>
+                    <h2 class="section-title">Keyframes - Critical Incidents Screenshots</h2>
+                    <div class="keyframe-grid">
+                        {% for kf in report.keyframes %}
+                            <div class="keyframe-card">
+                                <img src="{{ kf.url }}" alt="Incident keyframe {{ kf.index }}" class="keyframe-img">
+                                <div class="keyframe-caption">Keyframe #{{ kf.index }}: Incident at offset {{ kf.offset }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        {% else %}
+            <!-- Error State -->
+            <div class="report-document text-center py-5">
+                <i class="bi bi-file-earmark-x fs-1 text-danger mb-3"></i>
+                <h2 class="fw-bold mb-3">No Reports Found</h2>
+                <p class="text-muted mb-4">You have not completed any video upload analysis runs yet. Start and stop an ingestion run to generate a forensic report.</p>
+                <a href="/" class="btn btn-primary px-4 py-2" style="background: linear-gradient(135deg, #3498db, #2ecc71); border: none;">Go to Dashboard</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Floating Action Buttons (no-print) -->
+    <div class="fab-container no-print">
+        <a href="/" class="btn-fab btn-fab-back" title="Back to Dashboard">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        {% if report %}
+            <button class="btn-fab" onclick="window.print()" title="Print / Save PDF">
+                <i class="bi bi-printer-fill"></i>
+            </button>
+        {% endif %}
+    </div>
+
+</body>
+</html>
