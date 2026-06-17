@@ -1,360 +1,174 @@
-
-# AI Infrastructure Monitoring System
+# AI Infrastructure Monitoring System with SentinelAI
 
 ## Overview
 
-AI Infrastructure Monitoring System is a full-stack observability platform designed to monitor, analyze, and visualize the runtime behavior of AI workloads deployed in Docker containers.
+AI Infrastructure Monitoring System is a production-inspired MLOps and Observability platform built around **SentinelAI**, an intelligent video surveillance analytics application. The project combines real-time AI inference with modern observability practices to demonstrate how machine learning workloads can be monitored, analyzed, and maintained in a containerized environment.
 
-The project integrates a real-world AI video analytics application (SentinelAI) with industry-standard monitoring tools including Prometheus, Grafana, and cAdvisor. It continuously collects infrastructure metrics, performs anomaly detection, generates alerts, and provides actionable insights through a centralized dashboard.
+Unlike traditional monitoring projects that focus only on infrastructure metrics, this platform provides end-to-end visibility into both the AI application and the underlying system. It integrates metrics, logs, traces, and anomaly detection into a unified observability ecosystem powered by Grafana.
 
----
+The project is divided into two tightly integrated components:
 
-## Key Features
+### SentinelAI – Intelligent Surveillance Analytics
 
-### Real-Time Monitoring
+SentinelAI is a computer vision application that analyzes video streams and identifies potentially suspicious activities in real time. The system processes incoming frames using AI models, applies event detection rules, and generates alerts and forensic reports for security analysis.
 
-* Container CPU monitoring
-* Container memory monitoring
-* Container network monitoring
-* Docker container observability using cAdvisor
+Key capabilities include:
 
-### Metrics Collection
+* Real-time object detection using YOLO
+* Suspicious bag detection
+* Loitering detection
+* Event correlation and alert generation
+* Investigation report generation
+* Historical event tracking
+* Dashboard-driven incident analysis
+* RESTful API built with FastAPI
 
-* Prometheus-based metrics scraping
-* Time-series metric storage
-* Historical metric analysis
+### Monitoring & Observability Platform
 
-### Anomaly Detection Engine
+The monitoring platform provides complete visibility into the AI application's behavior and infrastructure performance. It follows modern observability principles by collecting and correlating metrics, logs, and distributed traces.
 
-* Z-Score based anomaly detection
-* Percentile based anomaly detection
-* Rolling window anomaly detection
-* Severity classification
+Key capabilities include:
 
-### Alert Management
-
-* Automatic anomaly alerts
-* Severity-based alert categorization
-* Alert history management
-* Alert clearing functionality
-
-### System Insights
-
-* Infrastructure health score
-* Resource utilization analysis
-* Automated recommendations
-* Health status reporting
-
-### Visualization
-
-* Grafana dashboards
-* Real-time metric visualization
-* Performance trend analysis
-* Monitoring panels for AI workloads
+* Real-time infrastructure monitoring
+* Container resource tracking
+* Centralized log aggregation
+* Distributed request tracing
+* Application performance analysis
+* ML-based anomaly detection
+* Unified Grafana dashboards
+* End-to-end observability workflows
 
 ---
 
 ## System Architecture
 
 ```text
-+---------------------+
-|     SentinelAI      |
-|  AI Video Analytics |
-+----------+----------+
-           |
-           v
-+---------------------+
-|      Docker         |
-|    Containers       |
-+----------+----------+
-           |
-           v
-+---------------------+
-|      cAdvisor       |
-| Container Metrics   |
-+----------+----------+
-           |
-           v
-+---------------------+
-|     Prometheus      |
-| Time Series DB      |
-+----------+----------+
-           |
-           v
-+---------------------+
-|  FastAPI Analytics  |
-| Anomaly Detection   |
-| Alerts & Insights   |
-+----------+----------+
-           |
-           v
-+---------------------+
-|      Grafana        |
-| Visualization Layer |
-+---------------------+
+                    ┌────────────────────────┐
+                    │      Video Sources     │
+                    └────────────┬───────────┘
+                                 │
+                                 ▼
+                    ┌────────────────────────┐
+                    │       SentinelAI       │
+                    │   AI Inference Layer   │
+                    └────────────┬───────────┘
+                                 │
+              ┌──────────────────┼──────────────────┐
+              │                  │                  │
+              ▼                  ▼                  ▼
+
+      Prometheus          Loki Logs         Tempo Traces
+        Metrics                             OpenTelemetry
+
+              │                  │                  │
+              └──────────────────┼──────────────────┘
+                                 ▼
+
+                         Grafana Dashboard
+                    Unified Observability Layer
 ```
+
+---
+
+## Core Features
+
+### AI & Video Analytics
+
+* AI-powered surveillance monitoring
+* Real-time object detection
+* Event-driven alert generation
+* Suspicious activity detection
+* Forensic investigation reports
+* Historical event analysis
+
+### Infrastructure Monitoring
+
+* CPU utilization monitoring
+* Memory utilization monitoring
+* Network traffic monitoring
+* Docker container monitoring
+* Resource consumption analytics
+
+### Centralized Logging
+
+* Log aggregation using Loki
+* Container log collection using Promtail
+* Real-time log streaming
+* Error and warning log analysis
+
+### Distributed Tracing
+
+* OpenTelemetry instrumentation
+* Request lifecycle visualization
+* Performance bottleneck analysis
+* Trace-to-Logs correlation
+* Trace-to-Metrics correlation
+
+### Machine Learning Analytics
+
+* Statistical anomaly detection
+* Z-score based anomaly scoring
+* Automated severity classification
+* Infrastructure behavior analysis
 
 ---
 
 ## Technology Stack
 
-### Backend
+### AI & Backend
 
 * Python
 * FastAPI
+* YOLO
+* OpenCV
+* SQLAlchemy
+* SQLite
+* Jinja2
 
-### Monitoring
+### Monitoring & Observability
 
-* Prometheus
 * Grafana
+* Prometheus
+* Loki
+* Promtail
+* Tempo
+* OpenTelemetry
 * cAdvisor
 
-### AI Application
-
-* YOLOv8
-* DeepSORT
-* OpenCV
-
-### Containerization
+### DevOps & Deployment
 
 * Docker
 * Docker Compose
-
-### Data Analysis
-
-* NumPy
-* SciPy
+* Containerized Microservices Architecture
 
 ---
 
-## Project Structure
+## Observability Workflow
+
+The platform enables engineers to move seamlessly between metrics, logs, and traces when investigating issues.
 
 ```text
-MonitoringDashboard
-│
-├── backend
-│   ├── routes
-│   ├── services
-│   ├── main.py
-│   └── prometheus_service.py
-│
-├── prometheus
-│   └── prometheus.yml
-│
-├── SentiAI
-│   ├── app
-│   ├── data
-│   ├── logs
-│   ├── videos
-│   ├── Dockerfile
-│   └── requirements.txt
-│
-└── docker-compose.yml
+CPU Spike
+    ↓
+Grafana Metrics
+    ↓
+Related Trace
+    ↓
+Associated Logs
+    ↓
+Root Cause Identification
 ```
+
+This approach mirrors observability practices used in modern production environments and demonstrates how AI applications can be monitored with the same rigor as enterprise software systems.
 
 ---
 
-## API Endpoints
-
-### Anomaly Detection
-
-#### CPU Analysis
-
-```http
-GET /anomaly/cpu
-```
-
-Response:
-
-```json
-{
-  "severity": "normal",
-  "z_score": -0.47,
-  "statistics": {},
-  "anomaly_score": 0
-}
-```
-
----
-
-#### Memory Analysis
-
-```http
-GET /anomaly/memory
-```
-
----
-
-#### Network Analysis
-
-```http
-GET /anomaly/network
-```
-
----
-
-### Alerts
-
-#### Get Alerts
-
-```http
-GET /alerts
-```
-
----
-
-#### Clear Alerts
-
-```http
-DELETE /alerts
-```
-
----
-
-### Insights
-
-#### System Health
-
-```http
-GET /insights
-```
-
-Example Response:
-
-```json
-{
-  "system_health": "healthy",
-  "health_score": 100,
-  "cpu_status": "normal",
-  "memory_status": "normal",
-  "network_status": "normal"
-}
-```
-
----
-
-## Grafana Dashboard
-
-The dashboard visualizes:
-
-* SentinelAI CPU utilization
-* SentinelAI memory utilization
-* SentinelAI network traffic
-* Infrastructure trends
-* Resource consumption patterns
-
-### Example Metrics
-
-CPU
-
-```promql
-rate(container_cpu_usage_seconds_total{name="sentinel_ai_container"}[1m])
-```
-
-Memory
-
-```promql
-container_memory_usage_bytes{name="sentinel_ai_container"}
-```
-
-Network
-
-```promql
-rate(container_network_receive_bytes_total{name="sentinel_ai_container"}[1m])
-```
-
----
-
-## Running the Project
-
-### Clone Repository
-
-```bash
-git clone https://github.com/<username>/AI-Infrastructure-Monitoring-System.git
-cd AI-Infrastructure-Monitoring-System
-```
-
-### Start Services
-
-```bash
-docker compose up --build -d
-```
-
----
-
-## Service URLs
-
-### Monitoring Analytics API
-
-```text
-http://localhost:8000
-```
-
-### Grafana
-
-```text
-http://localhost:3000
-```
-
-### Prometheus
-
-```text
-http://localhost:9090
-```
-
-### cAdvisor
-
-```text
-http://localhost:8081
-```
-
-### SentinelAI
-
-```text
-http://localhost:8001
-```
-
----
-
-## Validation Performed
-
-The platform was validated through:
-
-* SentinelAI container monitoring
-* CPU metric collection
-* Memory metric collection
-* Network metric collection
-* Real-time anomaly detection
-* Alert generation
-* Health insight generation
-* Grafana dashboard visualization
-* End-to-end monitoring workflow verification
-
----
-
-## Future Improvements
-
-* Machine Learning based anomaly detection
-* Alert notifications via Email and Slack
-* Kubernetes monitoring support
-* Multi-container AI workload monitoring
-* Predictive infrastructure analytics
-* Distributed tracing integration
-
----
-
-## Resume Highlights
-
-* Built an AI infrastructure monitoring platform using Prometheus, Grafana, FastAPI, Docker, and cAdvisor.
-* Developed statistical anomaly detection using Z-Score, percentile analysis, and rolling-window techniques.
-* Integrated monitoring with a YOLOv8-based AI surveillance system to provide real-time infrastructure observability.
-* Designed automated alerting and system health scoring mechanisms for containerized AI workloads.
-
----
-
-## Author
-
-Tanuja Chennurkar
-
-AI Infrastructure Monitoring System
-2026
+## Project Goals
+
+* Build a practical AI surveillance application
+* Implement a complete observability stack
+* Demonstrate modern MLOps practices
+* Monitor AI workloads in production-like environments
+* Correlate metrics, logs, and traces
+* Apply machine learning techniques for anomaly detection
+* Create a scalable foundation for intelligent monitoring systems
