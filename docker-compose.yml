@@ -13,6 +13,8 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
 
+    restart: unless-stopped
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -23,6 +25,8 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
+    restart: unless-stopped
+
   grafana:
     image: grafana/grafana
     container_name: grafana
@@ -30,8 +34,14 @@ services:
     ports:
       - "3000:3000"
 
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
     depends_on:
       - prometheus
+      - loki
+
+    restart: unless-stopped
 
   sentinelai:
     build: ./SentiAI
@@ -52,3 +62,55 @@ services:
       - LOG_LEVEL=INFO
 
     restart: unless-stopped
+
+    depends_on:
+      - tempo
+
+  loki:
+    image: grafana/loki:2.9.8
+    container_name: loki
+
+    ports:
+      - "3100:3100"
+
+    command: -config.file=/etc/loki/local-config.yaml
+
+    volumes:
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml
+
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+
+    volumes:
+      - ./promtail/config.yml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    command: -config.file=/etc/promtail/config.yml
+
+    depends_on:
+      - loki
+
+    restart: unless-stopped
+  tempo:
+    image: grafana/tempo:latest
+
+    container_name: tempo
+
+    command:
+      - "-config.file=/etc/tempo.yaml"
+
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+
+    restart: unless-stopped
+volumes:
+  grafana-storage:
