@@ -16,6 +16,10 @@ from app.database.session import engine, Base, get_db
 from app.database.models import EventModel, AlertModel
 from app.services.video_service import video_pipeline
 
+from app.telemetry import tracer
+from opentelemetry.instrumentation.fastapi import (
+    FastAPIInstrumentor
+)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup actions
@@ -51,7 +55,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+FastAPIInstrumentor.instrument_app(app)
 # Register API Router
 app.include_router(api_router, prefix="/api")
 
